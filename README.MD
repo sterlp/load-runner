@@ -1,5 +1,5 @@
 
-= LoadRunner
+# LoadRunner
 ```
  -b,--basic <arg>      Use basic authentication user:password - will be
                        encoded.
@@ -10,21 +10,21 @@
  -u,--url <arg>        URL to load test
 ```
 
-== Examples
+## Examples
 
-== GET on Google
+### GET on Google
 
 - URL: https://google.de
 - Method: GET
 - Clients: 100
 - Requests: 10.000
 
-=== Request
+#### Request
 
    java -jar target/load-runner.jar https://google.de
 
 
-=== Result
+#### Result
 ```
 -- Counters --------------------------------------------------------------------
 200.GET.https://google.de
@@ -52,9 +52,9 @@ GET.https://google.de
               99% <= 4382,18 milliseconds
             99.9% <= 5909,52 milliseconds
 
-``
+```
 
-== POST
+### POST
 
 - URL: http://localhost:8080/foo
 - Method: POST
