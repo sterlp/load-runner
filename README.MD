@@ -21,7 +21,7 @@
 
 #### Request
 
-   java -jar target/load-runner.jar https://google.de
+`java -jar target/load-runner.jar https://google.de`
 
 
 #### Result
