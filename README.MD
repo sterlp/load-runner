@@ -1,4 +1,6 @@
 
+[![Java CI with Maven](https://github.com/sterlp/load-runner/actions/workflows/maven.yml/badge.svg)](https://github.com/sterlp/load-runner/actions/workflows/maven.yml)
+
 # LoadRunner
 ```
  -b,--basic <arg>      Use basic authentication user:password - will be
