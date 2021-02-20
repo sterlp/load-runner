@@ -37,6 +37,8 @@ public class CommandLineLoadTest {
     private HttpMethod method = HttpMethod.GET;
     private String url;
     private String basicAuth;
+    private String payload;
+
     private int clients = 100;
     private int requests = 10_000;
     private HttpHeaders headers;
@@ -52,7 +54,8 @@ public class CommandLineLoadTest {
                 System.out.println(StringUtils.rightPad("Starting: " + this, 80, '='));
                 long time = System.currentTimeMillis();
                 for (int i = 0; i < requests; i++) {
-                    executorService.submit(new Runner(reporter, restTemplate, url, method, headers));
+                    executorService.submit(
+                            new Runner(reporter, restTemplate, url, method, headers, payload));
                 }
                 
                 executorService.shutdown();
@@ -75,8 +78,9 @@ public class CommandLineLoadTest {
     private boolean parseOptions(String[] args) {
         final Options options = new Options();
         options.addOption("u", "url", true, "URL to load test");
-        //options.addOption("m", "method", false, "HTTP method to use.");
-        //options.addOption("p", "payload", false, "String payload to send.");
+        options.addOption("m", "method", true, "HTTP method to use (GET/POST/PUT).");
+        options.addOption("p", "payload", true, "String payload to send.");
+
         options.addOption("b", "basic", true,
                 "Use basic authentication user:password - will be encoded.");
         options.addOption(Option.builder("c").longOpt("clients").hasArg()
@@ -105,6 +109,12 @@ public class CommandLineLoadTest {
                 if (cmd.hasOption('r')) {
                     requests = Integer.valueOf(cmd.getOptionValue('r')).intValue();
                 }
+                if (cmd.hasOption('m')) {
+                    method = HttpMethod.valueOf(cmd.getOptionValue('m').toUpperCase());
+                }
+                if (cmd.hasOption('p')) {
+                    payload = cmd.getOptionValue('p');
+                }
                 return true;
             } catch (Exception e) {
                 System.err.println(e.getMessage());
@@ -122,13 +132,21 @@ public class CommandLineLoadTest {
     
     private static class Runner extends LoadTestRunner<String, HttpEntity<String>> {
         private HttpHeaders headers;
-        public Runner(LoadTestReporter reporter, RestTemplate restTemplate, String url, HttpMethod method, HttpHeaders headers) {
+        private String body;
+        public Runner(LoadTestReporter reporter, RestTemplate restTemplate, String url, 
+                HttpMethod method, HttpHeaders headers,
+                String body) {
             super(reporter, restTemplate, url, method);
             this.headers = headers;
+            this.body = body;
         }
         @Override
         protected HttpEntity<String> prepare() {
-            return new HttpEntity<String>(this.headers);
+            if (body == null) {
+                return new HttpEntity<String>(this.headers);
+            } else {
+                return new HttpEntity<String>(body, this.headers);
+            }
         }
         @Override
         protected ResponseEntity<String> execute(HttpEntity<String> entity, RestTemplate restTemplate) throws Exception {

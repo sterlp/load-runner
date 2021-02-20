@@ -36,6 +36,7 @@ public abstract class LoadTestRunner<T, V> implements Callable<T> {
                 reporter.failedCounter(method, url), reporter.timer(method, url));
     }
 
+    @SuppressWarnings("resource")
     @Override
     public T call() throws Exception {
         V v = prepare();

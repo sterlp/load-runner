@@ -43,7 +43,7 @@ public class ApacheHttpBuilder {
     private static CloseableHttpClient newHttpClient(int connCount, final SSLConnectionSocketFactory csf) {
         final CloseableHttpClient httpClient = HttpClients.custom()
                         .setDefaultRequestConfig(RequestConfig.custom()
-                                .setConnectTimeout(120 * 1_000)
+                                .setConnectTimeout(30 * 1_000)
                                 .setConnectionRequestTimeout(120 * 1_000)
                                 .build())
                         .setConnectionManagerShared(false)
