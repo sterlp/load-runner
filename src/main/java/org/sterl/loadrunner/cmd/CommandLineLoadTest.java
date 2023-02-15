@@ -62,7 +62,7 @@ public class CommandLineLoadTest {
                 executorService.awaitTermination(Math.min(30 * 60, requests * 30), TimeUnit.SECONDS);
                 time = System.currentTimeMillis() - time;
                 
-                System.out.println(StringUtils.rightPad(new Date() + " SVMS MappingStatus ", 80, '-'));
+                System.out.println(StringUtils.rightPad(new Date() + " " + url, 80, '-'));
                 System.out.println("Clients:       " + clients);
                 System.out.println("Request count: " + requests); 
                 System.out.println("Total time:    " + time + "ms." );
