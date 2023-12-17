@@ -1,5 +1,5 @@
-
 [![Java CI with Maven](https://github.com/sterlp/load-runner/actions/workflows/maven.yml/badge.svg)](https://github.com/sterlp/load-runner/actions/workflows/maven.yml)
+[![Maven](https://img.shields.io/maven-central/v/org.sterl.loadrunner/load-runner)](https://central.sonatype.com/artifact/org.sterl.loadrunner/load-runner)
 
 # LoadRunner
 ```
