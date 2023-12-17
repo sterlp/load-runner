@@ -25,6 +25,8 @@ public abstract class LoadTestRunner<T, V> implements Callable<T> {
      * @param value        the payload to sent
      * @param restTemplate the REST template to use
      * @return <code>null</code> to indicate an error occurred
+     * @throws Exception on any real error, will be counted as error too, use
+     *                   RestClientResponseException for specific errors
      */
     protected abstract ResponseEntity<T> execute(V value, RestTemplate restTemplate) throws Exception;
 
