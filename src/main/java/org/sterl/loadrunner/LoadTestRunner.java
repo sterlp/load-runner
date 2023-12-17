@@ -18,8 +18,13 @@ import lombok.AllArgsConstructor;
 public abstract class LoadTestRunner<T, V> implements Callable<T> {
 
     protected abstract V prepare();
+
     /**
-     * return <code>null</code> to indicate an error occurred
+     * Inner method doing the calls eacht time.
+     * 
+     * @param value        the payload to sent
+     * @param restTemplate the REST template to use
+     * @return <code>null</code> to indicate an error occurred
      */
     protected abstract ResponseEntity<T> execute(V value, RestTemplate restTemplate) throws Exception;
 
@@ -32,7 +37,7 @@ public abstract class LoadTestRunner<T, V> implements Callable<T> {
     private final Timer timer;
 
     public LoadTestRunner(LoadTestReporter reporter, RestTemplate restTemplate, String url, HttpMethod method) {
-        this(reporter, restTemplate, url, method, 
+        this(reporter, restTemplate, url, method,
                 reporter.failedCounter(method, url), reporter.timer(method, url));
     }
 
@@ -40,7 +45,7 @@ public abstract class LoadTestRunner<T, V> implements Callable<T> {
     @Override
     public T call() throws Exception {
         V v = prepare();
-        
+
         final Context t = timer.time();
         try {
             final ResponseEntity<T> result = execute(v, restTemplate);
@@ -49,7 +54,8 @@ public abstract class LoadTestRunner<T, V> implements Callable<T> {
                 failedCounter.inc();
             } else {
                 t.close();
-                reporter.getRegistry().counter(MetricRegistry.name(result.getStatusCodeValue() + "", method.name(), url)).inc();
+                reporter.getRegistry()
+                        .counter(MetricRegistry.name(result.getStatusCodeValue() + "", method.name(), url)).inc();
             }
 
             return result == null ? null : result.getBody();
