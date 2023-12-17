@@ -28,3 +28,11 @@ jobs:
             ${{ runner.os }}-maven-
       - name: Build with Maven
         run: mvn -B package --file pom.xml
+
+      - name: Build and deploy maven registry
+        env:
+          GPG_KEYNAME: ${{ secrets.PGP_KEYNAME }}
+          GPG_PASSPHRASE: ${{ secrets.PGP_PASSPHRASE }}
+          OSSRH_PWD_TOKEN: ${{ secrets.OSSRH_PWD_TOKEN }}
+          OSSRH_USER_TOKEN: ${{ secrets.OSSRH_USER_TOKEN }}
+        run: mvn -V -B -DskipTests=true --no-transfer-progress --settings .github/maven-settings.xml -P release deploy
